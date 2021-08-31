@@ -1,6 +1,6 @@
 {
   "name": "nodejs-version-checker",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Check NodeJS and npm version installed locally",
   "main": "index.js",
   "scripts": {
