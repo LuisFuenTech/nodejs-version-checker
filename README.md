@@ -43,12 +43,24 @@ const nodeJSVersionChecker = require("nodejs-version-checker");
 ```js
 const nodeJSVersionChecker = require("nodejs-version-checker");
 
+//Node version <=6.x.x
 nodeJSVersionChecker({ node: "6.17.1", npm: "3.10.0"})
   .then((result) => {
     console.log(result);
   })
   .catch((error) => console.error(error));
 
+//Node version >=6.x.x
+(async () => {
+  try {
+    const nodeJSVersionChecker = require("nodejs-version-checker");
+
+    const result = await nodeJSVersionChecker();
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+})();
 -----------------------------------------------------
 
 nodeJSVersionChecker({ node: "6.17.1"})
