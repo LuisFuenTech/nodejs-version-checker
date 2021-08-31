@@ -1,0 +1,35 @@
+{
+  "name": "nodejs-version-checker",
+  "version": "1.0.0",
+  "description": "Check NodeJS and npm version installed locally",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "./node_modules/.bin/babel src -d lib --no-copy-ignored"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuisFuenTech/nodejs-version-checker"
+  },
+  "bugs": "https://github.com/LuisFuenTech/nodejs-version-checker/issues",
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "http",
+    "error",
+    "http-errors",
+    "wrapper"
+  ],
+  "homepage": "https://github.com/LuisFuenTech/nodejs-version-checker#readme",
+  "author": "Luis Fuentes <luisfuentech> <luisfuentes.au@gmail.com> (https://github.com/LuisFuenTech)",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "7.14.8",
+    "@babel/core": "7.15.0",
+    "@babel/preset-env": "7.15.0",
+    "handlebars": "4.5.0",
+    "jest": "23.6.0",
+    "sinon": "7.0.0"
+  },
+  "dependencies": {}
+}
