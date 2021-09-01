@@ -53,8 +53,6 @@ nodeJSVersionChecker({ node: "6.17.1", npm: "3.10.0"})
 //Node version >=6.x.x
 (async () => {
   try {
-    const nodeJSVersionChecker = require("nodejs-version-checker");
-
     const result = await nodeJSVersionChecker();
     console.log(result);
   } catch (error) {
@@ -92,12 +90,12 @@ Output
 { node:
    { current: '8.17.1',
      expected: '6.17.1',
-     comparison: 0,
+     comparison: 1,
      comparisonString: 'greater' },
   npm:
-   { current: '3.10.10',
+   { current: '3.5.10',
      expected: '3.10.0',
-     comparison: 1,
+     comparison: -1,
      comparisonString: 'less' } }
 -----------------------------------------------------
 
@@ -116,10 +114,17 @@ Output
      comparisonString: 'equal' } }
 
 -----------------------------------------------------
-
+// Default result if no parameters is passed
 { node: { current: '6.17.1' } }
 
 ```
+
+# Comparison mapping
+
+- `comparison: 0`: The local version is _equal_ to the one expected
+- `comparison: 1`: The local version is _greater_ than the one expected
+- `comparison: -1`: The local version is _less_ than the one expected
+- If the key does not appear, it means that a comparison parameter was not passed
 
 # License
 
