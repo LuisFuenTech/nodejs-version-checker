@@ -1,34 +1,22 @@
-const resolveComparison = (_firstValues = "", _secondValues = "") => {
-  const firstValues = _firstValues.split(".").map(Number);
-  const secondValues = _secondValues.split(".").map(Number);
-  const referenceLength = Math.max(firstValues.length, secondValues.length);
-  let coefficient = 1;
-  const counter = { first: 0, second: 0 };
+const { proccessVersion } = require("./helper");
 
-  for (let i = 0; i < referenceLength; i++) {
-    /* istanbul ignore else */
-    if ((firstValues[i] || 0) < (secondValues[i] || 0))
-      counter.second += coefficient;
-    /* istanbul ignore else */
-    if ((firstValues[i] || 0) > (secondValues[i] || 0))
-      counter.first += coefficient;
+const execTerminalCommand = (command) => {
+  return new Promise((resolve, reject) => {
+    if (!command) return reject("command not given");
 
-    coefficient /= 2;
-  }
+    const { exec } = require("child_process");
 
-  /* istanbul ignore else */
-  if (counter.first > counter.second) return [1, "greater"];
-  /* istanbul ignore else */
-  if (counter.first < counter.second) return [-1, "less"];
-  return [0, "equal"];
+    exec(command, (error, stdout, stderror) => {
+      if (error) return reject(error);
+      if (stderror) return reject(stderror);
+
+      resolve(stdout.replace(/\n/, ""));
+    });
+  });
 };
 
 const checkNodeJSVersion = (options) => {
   return new Promise((resolve, reject) => {
-    const { exec } = require("child_process");
-    const result = {};
-    const _node = {};
-    const _npm = {};
     let node;
     let npm;
 
@@ -40,42 +28,17 @@ const checkNodeJSVersion = (options) => {
       npm = options.npm && options.npm.toString().replace(/v/gi, "");
     }
 
-    exec("node -v && npm -v", (error, stdout, stderr) => {
-      const [nodeVersion, npmVersion] = stdout.replace(/v/gi, "").split("\n");
-      _node.current = nodeVersion;
-
-      /* istanbul ignore else */
-      if (node) {
-        const [comparison, comparisonString] = resolveComparison(
-          nodeVersion,
-          node
-        );
-        _node.expected = node;
-        _node.comparison = comparison;
-        _node.comparisonString = comparisonString;
-      }
-      result.node = _node;
-
-      /* istanbul ignore else */
-      if (npm) {
-        _npm.current = npmVersion || "not installed";
-        _npm.expected = npm;
-
-        /* istanbul ignore else */
-        if (npmVersion) {
-          const [comparison, comparisonString] = resolveComparison(
-            npmVersion,
-            npm
-          );
-
-          _npm.comparison = comparison;
-          _npm.comparisonString = comparisonString;
-        }
-        result.npm = _npm;
-      }
-
-      resolve(result);
-    });
+    execTerminalCommand("node -v")
+      .then((nodeVersion) => {
+        execTerminalCommand("npm -v")
+          .then((npmVersion) => {
+            proccessVersion({ resolve, node, npm, nodeVersion, npmVersion });
+          })
+          .catch(() => {
+            proccessVersion({ resolve, node, npm, nodeVersion });
+          });
+      })
+      .catch(reject);
   });
 };
 
